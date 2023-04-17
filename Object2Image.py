@@ -6,9 +6,13 @@ class ObjectAndImage:
     @staticmethod
     def objectToImage(object, imageName='temp'):
         '''converts object(currently text only) to its corresponding black and white image'''
+        if not object:
+            object = 'Nice try'
+
         bits = ObjectAndImage.objectToBinary(object)
         objectMatrix = ObjectAndImage.bitsToMatrix(bits)
         ObjectAndImage.saveMatrixAsImage(objectMatrix, imageName)
+
 
     @staticmethod
     def objectToBinary(string):
@@ -40,8 +44,6 @@ class ObjectAndImage:
         img = mat*255   #1->255 for white in image
         path = 'D:/VSStudio/WebImage/static/'
         cv2.imwrite(f'{path + imageName}.png', img) 
-        # cv2.imshow('blackImage', img)
-        # cv2.wait()
 
 
     #******************decode******************#
@@ -80,14 +82,18 @@ class ObjectAndImage:
         for _ in range(n):
             section = bits[:8]
             character = chr(int(section,2))
+            if character == '\00':
+                return object
             object += character
             bits = bits[8:]
 
         return object
     
     #******************convert image directly from web******************#
+
     @staticmethod
     def imageToObjectWeb(input):
+        '''Converts image to object directly without storing the uploaded file'''
         #input is <FileStorage: 'webTest.png' ('image/png')> type
         imgArray = ObjectAndImage.webToArray(input)
         #convert numpyarray -> list -> bits
@@ -97,11 +103,12 @@ class ObjectAndImage:
 
     @staticmethod
     def webToArray(input):
+        '''Converts image uploaded directly to cv2 format without storing'''
         return cv2.imdecode(np.fromstring(input, np.uint8), cv2.IMREAD_UNCHANGED)
 
 
 # if __name__ == "__main__":
 #     t_o = ObjectAndImage
-#     t_o.objectToImage('Lets check if it works or not.', 'tempImage')
-#     #print(t_o.imageToObject('webTest.png')) 
+#     t_o.objectToImage('Enter your text here', 'tempImage')
+#     print(t_o.imageToObject('webTest.png')) 
     

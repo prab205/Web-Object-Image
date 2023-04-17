@@ -1,0 +1,52 @@
+label {
+  font-size: 20px;
+}
+
+
+#inputStr{
+  margin: 9px 0;
+}
+#inputImageId {
+  margin:41px 0; 
+}
+#p-out{
+  font-size: 20px;
+}
+#text-out{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+#output{
+  text-align: center;
+}
+#output-image{
+  margin:15px 0 6px 0;
+}
+
+
+.container {
+  display: grid;
+  grid-template-columns: 1fr 0.6fr;
+  /* specifies that grid is divided into 2 sections */
+  grid-gap: 30px;
+  margin: auto 100px;
+}
+.h1-head {
+  text-align:center;
+  padding:1em 1em 0em 1em;
+  margin:auto auto 0.3em auto;
+}
+.p-head{
+  font-size: 20px;
+  text-align: center;
+  margin:0.3em auto 3em auto;
+}
+.text-box{
+  width:200px;
+  height: 20px;
+  margin:7px 7px 0px 0px;
+}
+.input-form{
+  padding:25px;
+}
