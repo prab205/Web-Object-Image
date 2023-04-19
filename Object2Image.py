@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import os
 from math import sqrt, ceil
 
 class ObjectAndImage:
@@ -42,8 +43,8 @@ class ObjectAndImage:
     def saveMatrixAsImage(mat, imageName):
         '''converts matrix to correct color image matrix and saves the corresponding image'''
         img = mat*255   #1->255 for white in image
-        path = 'D:/VSStudio/WebImage/static/'
-        cv2.imwrite(f'{path + imageName}.png', img) 
+        imageStoreString = os.path.join(os.getcwd(), f'static\\{imageName}.png')
+        cv2.imwrite(imageStoreString, img)
 
 
     #******************decode******************#
