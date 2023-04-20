@@ -1,24 +1,24 @@
 import cv2
+import base64
 import numpy as np
 from math import sqrt, ceil
 
 class ObjectAndImage:
+    #******************encode******************#
     @staticmethod
-    def objectToImage(object, imageName='temp'):
-        '''converts object(currently text only) to its corresponding black and white image'''
+    def objectToBase64(object):
+        '''returns base64 encoded string of the image from the uploaded image'''
         if not object:
-            object = 'Nice try'
+            object = 'prabin-paudel.com.np'
 
         bits = ObjectAndImage.objectToBinary(object)
         objectMatrix = ObjectAndImage.bitsToMatrix(bits)
-        ObjectAndImage.saveMatrixAsImage(objectMatrix, imageName)
-
-
+        return ObjectAndImage.convertBase64(objectMatrix)
+    
     @staticmethod
     def objectToBinary(string):
         '''Converts string to its corresponding binary digits'''
-        res = ''.join(format(ord(i), '08b') for i in string)
-        return res
+        return ''.join(format(ord(i), '08b') for i in string)
     
     @staticmethod
     def bitsToMatrix(bits):
@@ -39,24 +39,46 @@ class ObjectAndImage:
         return mat
 
     @staticmethod
+    def convertBase64(objectMatrix):
+        '''converts matrix to its bytearray and then base64 encoded format for directly displaying the image'''
+        img = objectMatrix*255
+        _, arr = cv2.imencode('.png', img)
+        baseString = base64.b64encode(arr)
+        return str(baseString, 'utf-8')
+    
+    #****************** offline file ******************#
+    @staticmethod
+    def objectToImageSave(object, imageName='temp'):
+        '''convert and save object(currently text only) to its corresponding black and white image'''
+        if not object:
+            object = 'prabin-paudel.com.np'
+
+        bits = ObjectAndImage.objectToBinary(object)
+        objectMatrix = ObjectAndImage.bitsToMatrix(bits)
+        ObjectAndImage.saveMatrixAsImage(objectMatrix, imageName)
+    
+    @staticmethod
     def saveMatrixAsImage(mat, imageName):
         '''converts matrix to correct color image matrix and saves the corresponding image'''
         img = mat*255   #1->255 for white in image
-        path = 'D:/VSStudio/WebImage/static/'
-        cv2.imwrite(f'{path + imageName}.png', img) 
+        cv2.imwrite(f'{imageName}.png', img)
 
 
-    #******************decode******************#
-
+    #****************** decode ******************#
     @staticmethod
-    def imageToObjectLoad(imageName):
-        '''converts image to its respective object form(currently text only)'''
-        #load image as black and white [0-255] numpy array
-        imgArray = cv2.imread(imageName, 0)
+    def imageToObjectWeb(input):
+        '''Converts image to object directly without storing the uploaded file'''
+        #input is <FileStorage: 'webTest.png' ('image/png')> type
+        imgArray = ObjectAndImage.webToArray(input)
         #convert numpyarray -> list -> bits
         bits = ObjectAndImage.arrayToBits(imgArray)
         #convert bits -> ascii
         return ObjectAndImage.bitsToObject(bits)
+
+    @staticmethod
+    def webToArray(input):
+        '''Converts image uploaded directly to cv2 format without storing'''
+        return cv2.imdecode(np.fromstring(input, np.uint8), cv2.IMREAD_UNCHANGED)
 
     @staticmethod
     def arrayToBits(imgArray):
@@ -89,26 +111,39 @@ class ObjectAndImage:
 
         return object
     
-    #******************convert image directly from web******************#
-
+    #****************** offline ******************#
     @staticmethod
-    def imageToObjectWeb(input):
-        '''Converts image to object directly without storing the uploaded file'''
-        #input is <FileStorage: 'webTest.png' ('image/png')> type
-        imgArray = ObjectAndImage.webToArray(input)
-        #convert numpyarray -> list -> bits
-        bits = ObjectAndImage.arrayToBits(imgArray)
+    def imageLoadToObject(imageName):
+        '''load local image and decode to object form(currently text only). Include extension along with file name'''
+        
+        #take last 5 characters for checking file extension 
+        check = imageName[-5:]
+        if (check.find(r'.png') > -1):
+            {}
+        elif (check.find(r'.jpg') > -1) or (check.find(r'.jpeg') > -1):
+            print("File format currently not supported")
+            exit(-1)
+        else:
+            if imageName[-1:]=='.':
+                imageName = imageName + 'png'
+            else:
+                imageName = imageName + r'.png'
+
+        print(imageName)
+        imgArray = cv2.imread(imageName, 0)        
+        try:
+            #convert numpyarray -> list -> bits
+            bits = ObjectAndImage.arrayToBits(imgArray)
+        except:
+            print("Couldnot load image successfully. Check file or location")
+            exit(-1)
+
         #convert bits -> ascii
         return ObjectAndImage.bitsToObject(bits)
-
-    @staticmethod
-    def webToArray(input):
-        '''Converts image uploaded directly to cv2 format without storing'''
-        return cv2.imdecode(np.fromstring(input, np.uint8), cv2.IMREAD_UNCHANGED)
 
 
 # if __name__ == "__main__":
 #     t_o = ObjectAndImage
-#     t_o.objectToImage('Enter your text here', 'tempImage')
-#     print(t_o.imageToObject('webTest.png')) 
+#     t_o.objectToImageSave('Text to convert', 'file_name')
+#     print(t_o.imageLoadToObject('fileName.png')) 
     

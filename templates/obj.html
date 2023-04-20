@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="../static/styles.css" />
-    <title>Document</title>
+    <title>OTI</title>
 </head>
 <body>
     <div>
@@ -13,16 +13,16 @@
         <p class="p-head">Convert multiple paragraphs into a single image</p>
         <div class="container">
             <div class="text input-form">
-                <form action="{{ url_for("object2Image") }}" method="post">
+                <form action="/" method="post">
                     <label for="inputStr">Input string to convert to image</label><br>
                     <textarea id="inputStr" name="textInput" rows="3" cols="31" minlength="1"></textarea><br>
                     <input type="submit" value="Submit">
                 </form>
             </div>
             <div class="image input-form">
-                <form action="{{ url_for("image2Object") }}" method="post"  enctype="multipart/form-data">
+                <form action="/upload" method="post"  enctype="multipart/form-data">
                     <label for="inputImage">Upload the image to be decoded</label><br>
-                    <input type="file" id="inputImageId" name="inputImageName" accept="image/png, image/jpeg"><br>
+                    <input type="file" id="inputImageId" name="inputImageName" accept="image/png"><br>
                     <input type="submit" value="Submit" id="imageSubmit">
                 </form>
             </div>
