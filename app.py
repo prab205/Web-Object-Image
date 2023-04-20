@@ -11,8 +11,7 @@ def object2Image():
 
    if request.method == "POST" and uploadedString:
       ObjectAndImage.objectToImage(uploadedString, imageName)
-      imageStoreString = os.path.join(os.getcwd(), f'static/{imageName}.png')
-      return render_template("img.html", user_image = imageStoreString)
+      return render_template("img.html", user_image = f'/static/{imageName}.png')
 
    return render_template("index.html")
 
