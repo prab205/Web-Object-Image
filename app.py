@@ -1,19 +1,17 @@
-import os
-import cv2
 from Object2Image import ObjectAndImage
 from flask import Flask, render_template, request
 app = Flask(__name__)
 
 @app.route('/', methods =["GET", "POST"])
 def object2Image():
-   imageName = 'OTI'
    uploadedString = request.form.get("textInput")
 
    if request.method == "POST" and uploadedString:
-      ObjectAndImage.objectToImage(uploadedString, imageName)
-      return render_template("img.html", user_image = f'/static/{imageName}.png')
+      baseString = ObjectAndImage.objectToBase64(uploadedString)
+      return render_template("img.html", image_string = baseString)
 
    return render_template("index.html")
+
 
 @app.route('/upload', methods =["GET", "POST"])
 def image2Object():
