@@ -145,5 +145,5 @@ class ObjectAndImage:
 # if __name__ == "__main__":
 #     t_o = ObjectAndImage
 #     t_o.objectToImageSave('Text to convert', 'file_name')
-#     print(t_o.imageLoadToObject('fileName.png')) 
+#     print(t_o.imageLoadToObject('file_name.png')) 
     
